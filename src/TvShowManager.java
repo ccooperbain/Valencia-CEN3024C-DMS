@@ -1,7 +1,7 @@
 /**
  * Name: Christopher Bain
  * Course: 202620-CEN-3024C-23585
- * Date: 03/03/2026
+ * Date: 03/11/2026
  * Class Name: TvShowManager
  *
  * This class represents the business logic layer of the TV Show Database
@@ -101,7 +101,36 @@ public class TvShowManager {
 
     public void addShow(){
         System.out.println("Adding show...");
-        tvShows.add(new TvShow(setId()));
+        Scanner input = new Scanner(System.in);
+
+        int id = setId();
+
+        System.out.print("\nEnter the title of the tv show. \n >");
+        String title = input.nextLine();
+
+        System.out.print("\nIs this animated? (enter 1 for yes and 2 for no)\n [1] YES \n [2] NO \n>");
+        int animated = input.nextInt();
+
+        System.out.print("\nPlease enter the month (as a number) that you completed the tv show.\n>");
+        int month = input.nextInt();
+
+        System.out.print("\nPlease enter the date that you completed the tv show.\n>");
+        int date = input.nextInt();
+
+        System.out.print("\nPlease enter the year that you completed the tv show.\n");
+        System.out.print("(Enter a value between 1928 - 3005) \n>");
+        int year = input.nextInt();
+
+        System.out.print("\nDid you complete this show? (enter 1 for yes and 2 for no)\n");
+        System.out.print("[1] YES\n[2] NO\n>");
+        int watchList = input.nextInt();
+
+        System.out.print("\nPlease enter the rating of the tv show from 0-10. \n>");
+        double rating = input.nextDouble();
+
+        TvShow show = new TvShow(id,title,animated,month,date,year,rating,watchList);
+
+        tvShows.add(show);
 
     }
 
@@ -165,25 +194,35 @@ public class TvShowManager {
 
                     switch(input.nextInt()){
                         case 1:
-                            p.setTitle();
+                            System.out.print("\nEnter the title of the tv show. \n >");
+                            input.nextLine();
+                            p.setTitle(input.nextLine());
                             break;
                         case 2:
-                            p.setAnimated();
+                            System.out.print("\nIs this animated? (enter 1 for yes and 2 for no)\n [1] YES \n [2] NO \n >");
+                            p.setAnimated(input.nextInt());
                             break;
                         case 3:
-                            p.setCompletionMonth();
+                            System.out.print("\nPlease enter the month (as a number) that you completed the tv show.\n >");
+                            p.setCompletionMonth(input.nextInt());
                             break;
                         case 4:
-                            p.setCompletionDate();
+                            System.out.print("\nPlease enter the date that you completed the tv show.\n>");
+                            p.setCompletionDate(input.nextInt());
                             break;
                         case 5:
-                            p.setCompletionYear();
+                            System.out.print("\nPlease enter the year that you completed the tv show.\n");
+                            System.out.print("(Enter a value between 1928 - 3005) \n>");
+                            p.setCompletionYear(input.nextInt());
                             break;
                         case 6:
-                            p.setOnWatchList();
+                            System.out.print("\nDid you complete this show? (enter 1 for yes and 2 for no)\n");
+                            System.out.print("[1] YES\n[2] NO\n>");
+                            p.setOnWatchList(input.nextInt());
                             break;
                         case 7:
-                            p.setRating();
+                            System.out.print("\nPlease enter the rating of the tv show from 0-10. \n>");
+                            p.setRating(input.nextDouble());
                             break;
                             default:
                                 System.out.println("Invalid input");
@@ -366,7 +405,7 @@ public class TvShowManager {
      *
      */
 
-    public void loadApp(){
+    public boolean loadApp(){
         String fileName = "tvShows.txt"; //setting the file name
         try{
             Path path = Path.of(fileName);//the file should exist in the current directory of the running application.
@@ -381,16 +420,27 @@ public class TvShowManager {
                             Integer.parseInt(parts[4]),Integer.parseInt(parts[5]),Double.parseDouble(parts[6]),Boolean.parseBoolean(parts[7])));
 
                 }
+                return true;
 
 
             }else{
                 System.out.println("The text file tvShows.txt does not exist... creating file ");
                 Files.createFile(path);// creates the file
+                return true;
             }
         } catch (Exception e){
             System.out.println("Error loading app process");
             e.printStackTrace();
         }
+        return false;
+    }
+
+    public ArrayList<TvShow> getTvShows(){
+        return tvShows;
+    }
+
+    public void addShow(TvShow show){
+        tvShows.add(show);
     }
 
 }

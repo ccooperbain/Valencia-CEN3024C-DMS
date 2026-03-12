@@ -4,9 +4,10 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
+ * Module 8 | DMS Project Phase 2: Software Testing
  * Name: Christopher Bain
  * Course: 202620-CEN-3024C-23585
- * Date: 03/03/2026
+ * Date: 03/11/2026
  * Class Name: Main
  *
  * Program Objective:
