@@ -68,6 +68,7 @@ public class TvShow {
         return isAnimated;
     }
 
+    public void setAnimatedGui(boolean input){isAnimated = input;}
     public boolean setAnimated(int input) throws InputMismatchException {
 
             switch (input) {
@@ -151,6 +152,7 @@ public class TvShow {
         return onWatchList;
     }
 
+    public void setOnWatchListGui(boolean input){onWatchList = input;}
     public boolean setOnWatchList(int input) throws InputMismatchException {
         switch (input) {
             case 1:
@@ -164,6 +166,8 @@ public class TvShow {
                 throw new InputMismatchException();
         }
     }
+
+
     public String getIdFormated(){
         return String.format("%07d", id);
     }

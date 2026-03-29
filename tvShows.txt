@@ -1,0 +1,21 @@
+0000300-Breaking Bad-false-9-29-2013-9.5-false
+0000301-Avatar The Last Airbender-true-7-19-2008-9.8-false
+0000302-The Office-false-5-16-2013-8.9-true
+0000303-Attack on Titan-true-11-4-2023-9.2-false
+0000304-Stranger Things-false-8-27-2022-8.7-true
+0000305-Fullmetal Alchemist Brotherhood-true-7-4-2010-9.9-false
+0000306-Game of Thrones-false-5-19-2019-6.5-true
+0000307-Death Note-true-6-27-2007-9.0-false
+0000308-The Mandalorian-false-4-19-2023-8.6-true
+0000309-Rick and Morty-true-9-5-2022-8.4-false
+0000310-Demon Slayer-true-2-13-2022-8.8-false
+0000311-The Boys-false-7-8-2022-8.5-true
+0000312-Arcane-true-11-20-2021-9.3-false
+0000313-Sherlock-false-1-15-2017-9.1-true
+0000314-One Punch Man-true-12-21-2015-8.8-false
+0000315-Westworld-false-8-14-2022-7.9-true
+0000316-Jujutsu Kaisen-true-3-27-2021-8.9-false
+0000317-Loki-false-11-9-2023-8.2-true
+0000318-The Witcher-false-12-17-2021-8.0-true
+0000319-My Hero Academia-true-10-2-2022-8.3-false
+0000320-Invincible-true-4-30-2021-8.7-false

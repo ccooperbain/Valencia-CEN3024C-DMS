@@ -84,6 +84,42 @@ public class TvShowManager {
 
     }
 
+    //TODO added new file reader for the gui program that takes in a string
+    public void loadFromFileGui(String fileLocation){
+        System.out.println("Loading Tv Shows...");
+        System.out.println("add from file remember to remove the quotes");
+        System.out.print(">");
+        try{
+            BufferedReader fileSource = new BufferedReader(new FileReader(fileLocation));
+            //The file expects a path that does not include the quotation marks.
+
+            while(fileSource.ready()){
+
+                try{
+                    String tvShowEntry  = fileSource.readLine();
+                    System.out.println("The string being processed is: " + tvShowEntry);
+                    String[] parts = tvShowEntry.split("-");
+                    int id =  Integer.parseInt(parts[0]);
+                    if(takenId(id)){
+                        throw new Exception("Tv Show id is already taken :" + id);
+                    }
+
+                    tvShows.add(new TvShow(id,parts[1],Boolean.parseBoolean(parts[2]),Integer.parseInt(parts[3]),
+                            Integer.parseInt(parts[4]),Integer.parseInt(parts[5]),Double.parseDouble(parts[6]),Boolean.parseBoolean(parts[7])));
+
+                }catch(Exception e){
+                    System.out.println("Invalid tv show entry from file text file the line of text was not expected or a entry has an existing id.");
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("The referenced file location was not found ");
+        }catch (IOException f){
+            System.out.println("Could not read line from file.");
+        }
+
+    }
+
 
     /**
      * Method Name: addShow
@@ -279,6 +315,29 @@ public class TvShowManager {
 
     }
 
+    //TODO added new deletion for the gui program that takes in a int
+    public void deleteShowGui(int id){
+        System.out.println("Deleting show...");
+        Iterator<TvShow> iterator = tvShows.iterator();
+
+        try{
+            while(iterator.hasNext()){
+                if(iterator.next().getId() == id){
+                    System.out.println("The show has been deleted.");
+                    iterator.remove();
+                    return;
+                }
+            }
+
+        }catch(InputMismatchException e){
+            System.out.println("Invalid input try again");
+        }
+        System.out.println("The reference id has not been found no show has been deleted.");
+        //hopefully the return inside of the if statement means that if it is found this output gets skipped over
+        //TODO Remember to delete this comment after testing.
+
+    }
+
     /**
      * Method Name: calculateAverageRating
      *
@@ -410,6 +469,9 @@ public class TvShowManager {
         try{
             Path path = Path.of(fileName);//the file should exist in the current directory of the running application.
             if(Files.exists(path)){
+
+                //TODO Place the refresh for the table in this section
+
                 System.out.println("The text file tvShows.txt exists");
                 BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
                 String line;
@@ -425,6 +487,9 @@ public class TvShowManager {
 
             }else{
                 System.out.println("The text file tvShows.txt does not exist... creating file ");
+
+                //TODO Place the refresh for the table in this section
+
                 Files.createFile(path);// creates the file
                 return true;
             }
