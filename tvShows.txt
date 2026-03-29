@@ -19,3 +19,5 @@
 0000318-The Witcher-false-12-17-2021-8.0-true
 0000319-My Hero Academia-true-10-2-2022-8.3-false
 0000320-Invincible-true-4-30-2021-8.7-false
+0000001-Test show-true-1-1-2000-1.0-true
+0000002-test 2-false-1-1-2000-4.0-false

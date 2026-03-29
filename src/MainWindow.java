@@ -1,10 +1,12 @@
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JSpinner;
+
 
 //TODO merge the month day and year in the colum
 public class MainWindow extends JFrame {
@@ -37,11 +39,9 @@ public class MainWindow extends JFrame {
         @Override
         public boolean isCellEditable(int row, int column) {return false;}
     };
-    //private DefaultTableModel tvShowModel = (DefaultTableModel) tvShowTable.getModel();
     private DefaultTableModel tvShowModel = tableModel;
     private JScrollPane scrollPane;
     private JLabel averageResult;
-    private JLabel testValue;
     private int selectedEntry = -1;
 
 
@@ -57,6 +57,7 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
+
                     TvShow entry = new TvShow(tvShowManager.setId(),titleEntryField.getText(),isAnimated.isSelected(), (Integer) monthEntry.getValue(),(Integer)dateEntry.getValue(),(Integer)yearEntry.getValue(),ratingEntrySlider.getValue()/10,onWatchList.isSelected());
                     tvShowManager.addShow(entry);
                     refreshTable();
@@ -77,6 +78,7 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileFilter(new FileNameExtensionFilter("Text Files (*.txt)","txt"));
                 int chooserResult = fileChooser.showOpenDialog(mainPanel);
                 if(chooserResult == JFileChooser.APPROVE_OPTION){
                     String filePath = fileChooser.getSelectedFile().getAbsolutePath();
