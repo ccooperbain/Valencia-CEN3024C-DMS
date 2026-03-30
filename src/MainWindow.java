@@ -1,3 +1,14 @@
+/**
+ * Name: Christopher Bain
+ * Course: 202620-CEN-3024C-23585
+ * Date: 03/29/2026
+ * Class Name: MainWindow.java
+ *
+ * This class represents the GUI and functionality for the form of java swing
+ *It handles what the Main.java used to handel
+ *
+ */
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -8,14 +19,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JSpinner;
 
 
-//TODO merge the month day and year in the colum
 public class MainWindow extends JFrame {
     TvShowManager tvShowManager = new TvShowManager();
     private JPanel mainPanel;
     private JPanel leftPanel;
     private JPanel centerPanel;
     private JTextField titleEntryField;
-    SpinnerNumberModel monthModel = new SpinnerNumberModel(1,1,31,1);
+    SpinnerNumberModel monthModel = new SpinnerNumberModel(1,1,12,1);
     private JSpinner monthEntry;
     SpinnerNumberModel dateModel = new SpinnerNumberModel(1,1,31,1);
     private JSpinner dateEntry;
@@ -45,6 +55,9 @@ public class MainWindow extends JFrame {
     private int selectedEntry = -1;
 
 
+    /**
+     * Constructor that contains the functionality of the buttons inside the program.
+     */
     public MainWindow(){
         //addColumns();
         monthEntry.setModel(monthModel);
@@ -64,7 +77,7 @@ public class MainWindow extends JFrame {
                     tvShowManager.saveToFile();
                 }catch(Exception ee){
                     //Display error message or window
-                    //TODO error message for incorrect entries
+                    System.out.println("An error occured on the add show1 button");
                 }
             }
         });
@@ -143,12 +156,12 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 selectedEntry = tvShowTable.getSelectedRow();
 
-                System.out.println("the stored selected entry has a value of " + tvShowTable.getValueAt(selectedEntry,1));
-
                 if(selectedEntry == -1){
                     JOptionPane.showMessageDialog(mainPanel,"Please select an entry");
                     return;
                 }
+                System.out.println("the stored selected entry has a value of " + tvShowTable.getValueAt(selectedEntry,1));
+
                 for(TvShow tvShow : tvShowManager.getTvShows()){
                     if(tvShow.getId() == (Integer)tvShowTable.getValueAt(selectedEntry,0)){
                         tvShow.setTitle(titleEntryField.getText());
@@ -168,6 +181,19 @@ public class MainWindow extends JFrame {
         });
     }
 
+    /**
+     * Method Name: main
+     *
+     * Purpose:
+     * Serves as the entry point of the program. It initializes the TvShowManager,
+     * and displays the gui of the application.
+     *
+     *Arguments:
+     *
+     * Return Value:
+     *
+     */
+
     public static void main(String[] args){
 
         JFrame frame = new JFrame("TvShow Manager");
@@ -178,18 +204,18 @@ public class MainWindow extends JFrame {
         frame.setVisible(true);
         window.refreshTable();
 
-
-        /*JFrame frame = new JFrame("TV Show Manager");
-        frame.setSize(400, 300);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JPanel panel = new JPanel();
-        frame.add(panel);
-        frame.setVisible(true);*/
-
-
     }
 
+    /**
+     * Method Name: refreshTable
+     *
+     * Reloads the table showing in the application with the most up to date information
+     * that the array list contains
+     *
+     * arguments:
+     *
+     * Return Value:
+     */
     private void refreshTable(){
 
         tvShowModel.setRowCount(0);
@@ -208,19 +234,5 @@ public class MainWindow extends JFrame {
             });
         }
         tvShowTable.setModel(tvShowModel);
-
-
     }
-
-
-    /*private void addColumns(){
-        tvShowModel.addColumn("ID");
-        tvShowModel.addColumn("Title");
-        tvShowModel.addColumn("Is Animated");
-        tvShowModel.addColumn("Month Completed");
-        tvShowModel.addColumn("Day Completed");
-        tvShowModel.addColumn("Year Completed");
-        tvShowModel.addColumn("Rating");
-        tvShowModel.addColumn("Is On watchlist");
-    }*/
 }

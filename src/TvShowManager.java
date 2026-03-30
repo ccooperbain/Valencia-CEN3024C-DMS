@@ -1,7 +1,7 @@
 /**
  * Name: Christopher Bain
  * Course: 202620-CEN-3024C-23585
- * Date: 03/11/2026
+ * Date: 03/29/2026
  * Class Name: TvShowManager
  *
  * This class represents the business logic layer of the TV Show Database
@@ -84,7 +84,20 @@ public class TvShowManager {
 
     }
 
-    //TODO added new file reader for the gui program that takes in a string
+    /**
+     * Method Name: loadFromFileGui
+     *
+     * Purpose:
+     * Reads TV show data from a user-specified text file, parses each line,
+     * and adds valid TV show records to the internal. Its used by the GUI
+     *
+     * Arguments:
+     *String fileLocation
+     *
+     * Return Value:
+     *
+     */
+
     public void loadFromFileGui(String fileLocation){
         System.out.println("Loading Tv Shows...");
         System.out.println("add from file remember to remove the quotes");
@@ -310,12 +323,23 @@ public class TvShowManager {
             System.out.println("Invalid input try again");
         }
         System.out.println("The reference id has not been found no show has been deleted.");
-        //hopefully the return inside of the if statement means that if it is found this output gets skipped over
-        //TODO Remember to delete this comment after testing.
 
     }
 
-    //TODO added new deletion for the gui program that takes in a int
+    /**
+     * Method Name: deleteShowGui
+     *
+     * Purpose:
+     * Removes a TV show record from the collection based on the ID
+     * provided by the user used by the Gui format.
+     *
+     * Arguments:
+     *int id
+     *
+     * Return Value:
+     *
+     */
+
     public void deleteShowGui(int id){
         System.out.println("Deleting show...");
         Iterator<TvShow> iterator = tvShows.iterator();
@@ -333,8 +357,6 @@ public class TvShowManager {
             System.out.println("Invalid input try again");
         }
         System.out.println("The reference id has not been found no show has been deleted.");
-        //hopefully the return inside of the if statement means that if it is found this output gets skipped over
-        //TODO Remember to delete this comment after testing.
 
     }
 
