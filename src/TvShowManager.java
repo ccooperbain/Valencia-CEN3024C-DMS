@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Iterator;
@@ -31,6 +32,8 @@ public class TvShowManager {
 
     private final String SQLPREFIX = "jdbc:sqlite:";
     private String url ="";
+    private final String tabelName = "tv_shows";
+    private Connection databaseConnection;
     public TvShowManager() {
         tvShows = new ArrayList<TvShow>();
         loadApp();
@@ -133,12 +136,24 @@ public class TvShowManager {
         }catch (IOException f){
             System.out.println("Could not read line from file.");
         }
-
     }
 
-    public void setUrl(String url){this.url = url;}
-    public String getSQLPREFIX(){return SQLPREFIX;}
-    public String getUrl(){return url;}
+    public ResultSet loadDatabase(String filepath){
+        try{
+            databaseConnection = DriverManager.getConnection(getSQLPREFIX()+getUrl());
+            if(databaseConnection != null){
+                System.out.println("Connected to the Database successfully");
+                Statement statement = databaseConnection.createStatement();
+                return statement.executeQuery("SELECT * FROM tv_shows");
+            }
+        }catch(SQLException e){
+            System.out.println("Error in the manager loading of the database");
+
+        }
+        return null;
+    }
+
+
 
     /**
      * Method Name: addShow
@@ -187,6 +202,16 @@ public class TvShowManager {
 
         tvShows.add(show);
 
+    }
+
+    public int addShowToDatabase(String title,boolean is_anime,int month,int day,int year,int rating, boolean is_finished){
+        try{
+            Statement statement = databaseConnection.createStatement();
+            return statement.executeUpdate("INSERT INTO tv_shows (title, animated, month,day, year, rating, watchlist) VALUES ('"+title+"',"+is_anime+","+month+","+day+","+year+","+rating+","+is_finished+")");
+        }catch(Exception e){
+            System.out.println("Error in the manager adding of the tv show");
+        }
+        return -1;
     }
 
     /**
@@ -294,6 +319,16 @@ public class TvShowManager {
         }
     }
 
+    public int updateDatabaseShowEntry(int id,String title,boolean is_anime,int month,int day,int year,int rating,boolean is_finished){
+        try{
+            Statement statement = databaseConnection.createStatement();
+            statement.executeUpdate("UPDATE tv_shows SET title='"+title+"', animated="+is_anime+",month="+month+",day="+day+", year="+year+",rating="+rating+",watchlist="+is_finished+" WHERE id="+id);
+        }catch(SQLException e){
+            System.out.println("Error in the update database manager");
+        }
+        return -1;
+    }
+
     /**
      * Method Name: deleteShow
      *
@@ -366,6 +401,16 @@ public class TvShowManager {
 
     }
 
+    public int deleteShowFromDatabase(int index){
+        try{
+            Statement statement = databaseConnection.createStatement();
+            return statement.executeUpdate("DELETE FROM tv_shows WHERE id = " + index);
+        }catch(SQLException e){
+            System.out.println("Database error when deleting from database");
+        }
+        return -1;
+    }
+
     /**
      * Method Name: calculateAverageRating
      *
@@ -394,6 +439,19 @@ public class TvShowManager {
         }
         System.out.print("The average rating of the entered tv shows are:");
         return sum / numberOfTvShows;
+    }
+
+    public double calculateAvgRatingDatabase(){
+        try{
+         Statement statement = databaseConnection.createStatement();
+         ResultSet resultSet = statement.executeQuery("SELECT AVG(rating) FROM tv_shows;");
+         if(resultSet.next()){
+             return resultSet.getDouble(1);
+         }
+        }catch(SQLException e){
+            System.out.println("Error in calculating the average");
+        }
+        return -1;
     }
 
 
@@ -536,4 +594,11 @@ public class TvShowManager {
         tvShows.add(show);
     }
 
+    public Connection getConnection(){
+        return this.databaseConnection;
+    }
+
+    public void setUrl(String url){this.url = url;}
+    public String getSQLPREFIX(){return SQLPREFIX;}
+    public String getUrl(){return url;}
 }

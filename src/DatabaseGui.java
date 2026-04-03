@@ -61,8 +61,6 @@ public class DatabaseGui extends JFrame {
     private int selectedEntry = -1;
     private Connection guiConnection;
 
-
-
     /**
      * Constructor that contains the functionality of the buttons inside the program.
      */
@@ -83,16 +81,11 @@ public class DatabaseGui extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try{
 
-                    String query = addShowToGui(titleEntryField.getText(),isAnimated.isSelected(), (Integer) monthEntry.getValue(),(Integer)dateEntry.getValue(),(Integer)yearEntry.getValue(),ratingEntrySlider.getValue()/10,onWatchList.isSelected());
-                    Statement statement = guiConnection.createStatement();
-                    System.out.println(query);
-                    statement.executeUpdate(query);
+                    tvShowManager.addShowToDatabase(titleEntryField.getText(),isAnimated.isSelected(), (Integer) monthEntry.getValue(),(Integer)dateEntry.getValue(),(Integer)yearEntry.getValue(),ratingEntrySlider.getValue()/10,onWatchList.isSelected());
                     refreshTable();
-
                 }catch(Exception ee){
                     //Display error message or window
                     System.out.println("An error occured on the add show1 button");
-
                     System.out.println(ee.getMessage());
                 }
             }
@@ -101,17 +94,8 @@ public class DatabaseGui extends JFrame {
         calculateAverageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                double averageValue;
-
                 try{
-                    Statement statement = guiConnection.createStatement();
-                     ResultSet resultSet = statement.executeQuery("SELECT AVG(rating) FROM tv_shows;");
-                    if(resultSet.next()){
-                        averageValue = resultSet.getDouble(1);
-                        System.out.println("The result is: "+averageValue);
-                        averageResult.setText(String.format("%.2f",averageValue));
-                    }
-
+                    averageResult.setText("AVERAGE RATING: "+String.format("%.2f",tvShowManager.calculateAvgRatingDatabase()));
                 }catch(Exception ee){
                     System.out.println("Error in calculate average button");
                 }
@@ -125,11 +109,12 @@ public class DatabaseGui extends JFrame {
                 JFileChooser fileChooser = new JFileChooser();
                 //fileChooser.setFileFilter(new FileNameExtensionFilter("Text Files (*.txt)","txt"));
                 fileChooser.setFileFilter(new FileNameExtensionFilter("SQL lite (*.db)","db"));
+                String filePath;
 
                 //if file is found
                 int chooserResult = fileChooser.showOpenDialog(mainPanel);
                 if(chooserResult == JFileChooser.APPROVE_OPTION){
-                    String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                    filePath = fileChooser.getSelectedFile().getAbsolutePath();
                     JOptionPane.showMessageDialog(mainPanel,"Selected: " + filePath);
                     tvShowManager.setUrl(filePath);
                 }else{return;}
@@ -137,14 +122,14 @@ public class DatabaseGui extends JFrame {
                 //https://www.c-sharpcorner.com/blogs/retrieving-and-displaying-database-records-in-java-using-jtable#:~:text=Set%20up%20your%20environment:%20Ensure,data%20in%20a%20Swing%20application.
 
                 //try to connect to the specified database from the file and add the value of the connection to the variable  gui connection
-                try{
-                    guiConnection = DriverManager.getConnection(tvShowManager.getSQLPREFIX()+tvShowManager.getUrl());
-                    if(guiConnection != null){
-                        System.out.println("Connected to the database");
+                ResultSet fullTable = tvShowManager.loadDatabase(filePath);
+                if(fullTable == null){
+                    System.out.println("No database found");
+                    return;
+                }
 
-                        Statement statement = guiConnection.createStatement();
-                        ResultSet allEntries = statement.executeQuery("SELECT*FROM tv_shows");
-                        ResultSetMetaData metaData = allEntries.getMetaData();
+                try{
+                        ResultSetMetaData metaData = fullTable.getMetaData();
                         int columnCount = metaData.getColumnCount();
                         System.out.println("the column n count is " + columnCount);
 
@@ -157,10 +142,10 @@ public class DatabaseGui extends JFrame {
                         }
                         tvShowTable.setModel(dbTableModel);
 
-                        while(allEntries.next()){
+                        while(fullTable.next()){
                             Object[] row = new Object[columnCount];
                             for(int i=1;i<=columnCount;i++){
-                                row[i-1] = allEntries.getObject(i);
+                                row[i-1] = fullTable.getObject(i);
                             }
                             dbTableModel.addRow(row);
                         }
@@ -171,13 +156,9 @@ public class DatabaseGui extends JFrame {
                         calculateAverageButton.setEnabled(true);
                         addShowFromFileButton.setEnabled(false);
 
-                    }
-
                 }catch(SQLException es){
                     System.out.println();
                 }
-
-
             }
         });
         removeEntryButton.addActionListener(new ActionListener() {
@@ -188,16 +169,8 @@ public class DatabaseGui extends JFrame {
                     JOptionPane.showMessageDialog(mainPanel,"Please select an entry");
                     return;
                 }
-
                 int tvShowId = (int) tvShowTable.getValueAt(selectedEntry,0);
-                String query = "DELETE FROM tv_shows WHERE id = "+ tvShowId;
-
-                try{
-                    Statement statement = guiConnection.createStatement();
-                    statement.executeUpdate(query);
-                }catch(Exception ee){
-                    System.out.println("An error occured on the remove show1 button");
-                }
+                tvShowManager.deleteShowFromDatabase(tvShowId);
                 refreshTable();
             }
         });
@@ -228,20 +201,13 @@ public class DatabaseGui extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 selectedEntry = tvShowTable.getSelectedRow();
-
                 if(selectedEntry == -1){
                     JOptionPane.showMessageDialog(mainPanel,"Please select an entry");
                     return;
                 }
                 System.out.println("the stored selected entry has a value of " + tvShowTable.getValueAt(selectedEntry,1));
-                try{
-                    String query = updateShowToGui((int)tvShowTable.getValueAt(selectedEntry,0),titleEntryField.getText(),isAnimated.isSelected(),(int) monthEntry.getValue(),(int)dateEntry.getValue(),(int) yearEntry.getValue(),ratingEntrySlider.getValue()/10,onWatchList.isSelected());
-                    Statement statement = guiConnection.createStatement();
-                    statement.executeUpdate(query);
-                    System.out.println(query);
-                }catch(SQLException ee){
-                    System.out.println("Error is in the update button");
-                }
+                tvShowManager.updateDatabaseShowEntry((int)tvShowTable.getValueAt(selectedEntry,0),titleEntryField.getText(),isAnimated.isSelected(),(int) monthEntry.getValue(),(int)dateEntry.getValue(),(int) yearEntry.getValue(),ratingEntrySlider.getValue()/10,onWatchList.isSelected());
+
                 refreshTable();
             }
         });
@@ -290,11 +256,11 @@ public class DatabaseGui extends JFrame {
         dbTableModel.setColumnCount(0);
 
         try{
-            Statement statement = guiConnection.createStatement();
+            Statement statement = tvShowManager.getConnection().createStatement();
             ResultSet allEntries = statement.executeQuery("SELECT*FROM tv_shows");
             ResultSetMetaData metaData = allEntries.getMetaData();
             int columnCount = metaData.getColumnCount();
-            System.out.println("the column n count is " + columnCount);
+            System.out.println("the column count is " + columnCount);
 
 
 
@@ -320,15 +286,6 @@ public class DatabaseGui extends JFrame {
             System.out.println("Error in refresh function");
         }
 
-
-    }
-
-    public String addShowToGui(String title,boolean is_anime,int month,int day,int year,int rating, boolean is_finished){
-        return "INSERT INTO tv_shows (title, is_anime, month,day, year, rating, is_finished) VALUES ('"+title+"',"+is_anime+","+month+","+day+","+year+","+rating+","+is_finished+")";
-    }
-
-    public String updateShowToGui(int id,String title,boolean is_anime,int month,int day,int year,int rating,boolean is_finished){
-        return "UPDATE tv_shows SET title='"+title+"', is_anime="+is_anime+",month="+month+",day="+day+", year="+year+",rating="+rating+",is_finished="+is_finished+" WHERE id="+id;
     }
 
 }
