@@ -28,6 +28,9 @@ import java.util.Scanner;
 public class TvShowManager {
 
     private ArrayList<TvShow> tvShows;
+
+    private final String SQLPREFIX = "jdbc:sqlite:";
+    private String url ="";
     public TvShowManager() {
         tvShows = new ArrayList<TvShow>();
         loadApp();
@@ -133,6 +136,9 @@ public class TvShowManager {
 
     }
 
+    public void setUrl(String url){this.url = url;}
+    public String getSQLPREFIX(){return SQLPREFIX;}
+    public String getUrl(){return url;}
 
     /**
      * Method Name: addShow
