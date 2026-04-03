@@ -142,13 +142,7 @@ public class DatabaseGui extends JFrame {
                         }
                         tvShowTable.setModel(dbTableModel);
 
-                        while(fullTable.next()){
-                            Object[] row = new Object[columnCount];
-                            for(int i=1;i<=columnCount;i++){
-                                row[i-1] = fullTable.getObject(i);
-                            }
-                            dbTableModel.addRow(row);
-                        }
+                        refreshTable();
 
                         addShowButton1.setEnabled(true);
                         removeEntryButton.setEnabled(true);
@@ -185,6 +179,9 @@ public class DatabaseGui extends JFrame {
                 }
                 titleEntryField.setText(tvShowTable.getValueAt(selectedEntry,1).toString());
 
+                String animatedValue = tvShowTable.getValueAt(selectedEntry,2).toString();
+                isAnimated.setSelected(animatedValue.equalsIgnoreCase("Yes"));
+
 
                 monthEntry.setValue(tvShowTable.getValueAt(selectedEntry,3));
                 dateEntry.setValue(tvShowTable.getValueAt(selectedEntry,4));
@@ -193,6 +190,9 @@ public class DatabaseGui extends JFrame {
                 double doubleSliderValue = (Double) tvShowTable.getValueAt(selectedEntry,6)*10;
                 int intSliderValue = (int) doubleSliderValue;
                 ratingEntrySlider.setValue(intSliderValue);
+
+                String watchValue = tvShowTable.getValueAt(selectedEntry, 7).toString();
+                onWatchList.setSelected(watchValue.equalsIgnoreCase("Yes"));
 
             }
 
@@ -273,7 +273,14 @@ public class DatabaseGui extends JFrame {
             while(allEntries.next()){
                 Object[] row = new Object[columnCount];
                 for(int i=1;i<=columnCount;i++){
-                    row[i-1] = allEntries.getObject(i);
+
+                    Object value = allEntries.getObject(i);
+                    if(metaData.getColumnName(i).equals("animated") || metaData.getColumnName(i).equals("watchlist")){
+                        int intValue = (int) value;
+                        if(intValue == 1){row[i-1] = "yes";}else{row[i-1] = "no";}
+                    }else{
+                        row[i-1] = value;
+                    }
                 }
                 dbTableModel.addRow(row);
             }
