@@ -1,7 +1,7 @@
 /**
  * Name: Christopher Bain
  * Course: 202620-CEN-3024C-23585
- * Date: 03/29/2026
+ * Date: 04/04/2026
  * Class Name: TvShowManager
  *
  * This class represents the business logic layer of the TV Show Database
@@ -138,6 +138,21 @@ public class TvShowManager {
         }
     }
 
+    /**
+     * Method Name: loadDatabase
+     *
+     * Purpose:
+     * creates a connection to the SQLite database using the provided file path
+     * and retrieves all records from the tv_shows table.
+     *
+     * Arguments:
+     * String filepath - Path to the database file
+     *
+     * Return Value:
+     * ResultSet - Contains all records from the database
+
+     */
+
     public ResultSet loadDatabase(String filepath){
         try{
             databaseConnection = DriverManager.getConnection(getSQLPREFIX()+getUrl());
@@ -152,7 +167,6 @@ public class TvShowManager {
         }
         return null;
     }
-
 
 
     /**
@@ -203,6 +217,25 @@ public class TvShowManager {
         tvShows.add(show);
 
     }
+
+    /**
+     * Method Name: addShowToDatabase
+     *
+     * Purpose:
+     * Inserts a new TV show record into the database using the provided parameters.
+     *
+     * Arguments:
+     * String title
+     * boolean is_anime
+     * int month
+     * int day
+     * int year
+     * int rating
+     * boolean is_finished
+     *
+     * Return Value:
+     * int for number of rows inserted or -1 if an error occurs
+     */
 
     public int addShowToDatabase(String title,boolean is_anime,int month,int day,int year,int rating, boolean is_finished){
         try{
@@ -319,6 +352,26 @@ public class TvShowManager {
         }
     }
 
+    /**
+     * Method Name: updateDatabaseShowEntry
+     *
+     * Purpose:
+     * Updates an existing TV show record in the database using its ID.
+     *
+     * Arguments:
+     * int id
+     * String title
+     * boolean is_anime
+     * int month
+     * int day
+     * int year
+     * int rating
+     * boolean is_finished
+     *
+     * Return Value:
+     * int - Returns -1 if the update fails
+     */
+
     public int updateDatabaseShowEntry(int id,String title,boolean is_anime,int month,int day,int year,int rating,boolean is_finished){
         try{
             Statement statement = databaseConnection.createStatement();
@@ -401,6 +454,19 @@ public class TvShowManager {
 
     }
 
+    /**
+     * Method Name: deleteShowFromDatabase
+     *
+     * Purpose:
+     * Removes a TV show record from the database using its ID.
+     *
+     * Arguments:
+     * int index ID of the record to delete
+     *
+     * Return Value:
+     * int number of rows deleted or -1 if an error occurs
+     */
+
     public int deleteShowFromDatabase(int index){
         try{
             Statement statement = databaseConnection.createStatement();
@@ -440,6 +506,19 @@ public class TvShowManager {
         System.out.print("The average rating of the entered tv shows are:");
         return sum / numberOfTvShows;
     }
+
+    /**
+     * Method Name: calculateAvgRatingDatabase
+     *
+     * Purpose:
+     * Calculates the average rating of all TV shows stored in the database.
+     *
+     * Arguments:
+     * None
+     *
+     * Return Value:
+     * double The average of the table ratings, or -1 if an error occurs
+     */
 
     public double calculateAvgRatingDatabase(){
         try{

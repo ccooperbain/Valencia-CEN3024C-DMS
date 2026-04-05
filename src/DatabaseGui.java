@@ -9,7 +9,7 @@ import java.sql.*;
 /**
  * Name: Christopher Bain
  * Course: 202620-CEN-3024C-23585
- * Date: 03/29/2026
+ * Date: 04/04/2026
  * Class Name: MainWindow.java
  *
  * This class represents the GUI and functionality for the form of java swing
@@ -59,7 +59,7 @@ public class DatabaseGui extends JFrame {
     private JScrollPane scrollPane;
     private JLabel averageResult;
     private int selectedEntry = -1;
-    private Connection guiConnection;
+
 
     /**
      * Constructor that contains the functionality of the buttons inside the program.
@@ -256,8 +256,14 @@ public class DatabaseGui extends JFrame {
         dbTableModel.setColumnCount(0);
 
         try{
+
+            if(tvShowManager.getConnection() == null){
+                System.out.println("No database connection");
+                return;
+            }
+
             Statement statement = tvShowManager.getConnection().createStatement();
-            ResultSet allEntries = statement.executeQuery("SELECT*FROM tv_shows");
+            ResultSet allEntries = statement.executeQuery("SELECT * FROM tv_shows");
             ResultSetMetaData metaData = allEntries.getMetaData();
             int columnCount = metaData.getColumnCount();
             System.out.println("the column count is " + columnCount);
