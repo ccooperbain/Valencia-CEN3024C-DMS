@@ -6,20 +6,18 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import javax.swing.JSpinner;
+
 /**
  * Name: Christopher Bain
  * Course: 202620-CEN-3024C-23585
- * Date: 04/04/2026
+ * Date: 04/06/2026
  * Class Name: MainWindow.java
  *
  * This class represents the GUI and functionality for the form of java swing
- *It handles what the Main.java used to handel
+ *It handles what the Main.java used to handle this entry point of the program is used to interact with the database.
  *
  */
-
-import javax.swing.JSpinner;
-
-
 public class DatabaseGui extends JFrame {
     TvShowManager tvShowManager = new TvShowManager();
     private JPanel mainPanel;
@@ -62,7 +60,7 @@ public class DatabaseGui extends JFrame {
 
 
     /**
-     * Constructor that contains the functionality of the buttons inside the program.
+     * This constructor defines the functionality of the buttons.
      */
     public DatabaseGui(){
         monthEntry.setModel(monthModel);
@@ -213,19 +211,13 @@ public class DatabaseGui extends JFrame {
         });
     }
 
-    /**
-     * Method Name: main
-     *
-     * Purpose:
-     * Serves as the entry point of the program. It initializes the TvShowManager,
-     * and displays the gui of the application.
-     *
-     *Arguments:
-     *
-     * Return Value:
-     *
-     */
 
+
+    /**
+     * This serves as the entry point of the program. It initalizes the TvShowManager and displays the gui frame of the
+     * application
+     * @param args
+     */
     public static void main(String[] args){
 
         JFrame frame = new JFrame("TvShow Manager");
@@ -242,7 +234,7 @@ public class DatabaseGui extends JFrame {
     /**
      * Method Name: refreshTable
      *
-     * Reloads the table showing in the application with the most up to date information
+     * Reloads the table showing in the application with the most up-to-date information
      * that the array list contains
      *
      * arguments:

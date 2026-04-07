@@ -4,22 +4,24 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Module 9 | DMS Project Phase 3: Adding a User Interface
+ *
  * Name: Christopher Bain
  * Course: 202620-CEN-3024C-23585
- * Date: 04/04/2026
+ * Date: 04/06/2026
  * Class Name: Main
  *
  * Program Objective:
+ * This program was used as a hands-on learning experience of developing software. This program emphasizes the Use
+ * of CRUD (Create Read Update Delete) functionality.
  * This program is a Command Line Interface Database Management System that allows the user to use CRUD
- * methods and shows us a hands on example of the development of software.
+ * methods and shows us a hands-on example of the development of software.
  *
  * This Main class serves as the entry point of the application and is responsible
  * for controlling the program flow, displaying the menu options, and directing user
  * input to the appropriate business logic methods in the TvShowManager class.
+ * This project has many entry points and this Main class serves as the entry point of this application for the console
+ * version of the application.
  */
-
-
 public class Main {
 
     /**
@@ -27,11 +29,9 @@ public class Main {
      *
      * Purpose:
      * Serves as the entry point of the program. It initializes the TvShowManager,
-     * and displays the menu.
+     * and displays the menu using the menu() function.
      *
-     *Arguments:
-     *
-     * Return Value:
+     * @param args takes in any arguments during the launch of the program none are needed for this application.
      *
      */
     public static void main(String[] args) {
@@ -95,11 +95,9 @@ public class Main {
      *
      * Arguments:
      *
-     *
      * Return Value:
      *
      */
-
     public static void menu(){
         System.out.println("<.........Menu...........>");
         System.out.println("Enter the corresponding number to make your selection");

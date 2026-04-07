@@ -1,17 +1,3 @@
-/**
- * Name: Christopher Bain
- * Course: 202620-CEN-3024C-23585
- * Date: 04/04/2026
- * Class Name: TvShowManager
- *
- * This class represents the business logic layer of the TV Show Database
- * Management System. It manages a collection of TvShow objects and provides
- * functionality to perform CRUD.
- *
- * The class is responsible for loading data from a file, validating
- * and managing TV show records, and calculating the average rating.
- */
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,14 +12,38 @@ import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * Name: Christopher Bain
+ * Course: 202620-CEN-3024C-23585
+ * Date: 04/06/2026
+ * Class Name: TvShowManager
+ *
+ * This class represents the business logic layer of the TV Show Database
+ * Management System. It manages a collection of TvShow objects and provides
+ * functionality to perform CRUD operations.
+ *
+ * This Manager is used my all displaying classes an entry points of the program. It has methods and functionality
+ * used by Main.java, MainWindow.java, & DatabaseGui.java to maintain their functionality.
+ *
+ * The class is responsible for loading data from a file, validating
+ * and managing TV show records, and calculating the average rating.
+ *
+ * This classes manages/stores/accesses data from a arraylist text file and sqlite database.
+ */
 public class TvShowManager {
-
     private ArrayList<TvShow> tvShows;
-
     private final String SQLPREFIX = "jdbc:sqlite:";
     private String url ="";
     private final String tabelName = "tv_shows";
     private Connection databaseConnection;
+
+    /**
+     * Constructor: TvShowManager()
+     * this constructor is used for the Main.java and MainWindow.java classes. these classes rely on the text document
+     * that is either created by the program or the text document that is added by the customer.
+     *
+     * It starts the method loadApp() to prepare the needed files.
+     */
     public TvShowManager() {
         tvShows = new ArrayList<TvShow>();
         loadApp();
@@ -41,19 +51,17 @@ public class TvShowManager {
 
 
     /**
-     * Method Name: loadFromFile
+     * Method Name: loadFromFile()
      *
      * Purpose:
      * Reads TV show data from a user-specified text file, parses each line,
-     * and adds valid TV show records to the internal
+     * and adds valid TV show records to the internal array list of the program.
      *
      * Arguments:
-     *
      *
      * Return Value:
      *
      */
-
     public void loadFromFile(){
         System.out.println("Loading Tv Shows...");
         Scanner fileLocation = new Scanner(System.in);
@@ -94,16 +102,16 @@ public class TvShowManager {
      * Method Name: loadFromFileGui
      *
      * Purpose:
-     * Reads TV show data from a user-specified text file, parses each line,
-     * and adds valid TV show records to the internal. Its used by the GUI
+     *Reads TV show data from a user-specified text file, parses each line,
+     *and adds valid TV show records to the internal array list of the program. This method is used by the
+     * MainWindow.java class which provided the argument which is excepted to be the file location that the user
+     * submits through the GUI.
      *
-     * Arguments:
-     *String fileLocation
+     * @param fileLocation provided by the gui to the function.
      *
      * Return Value:
      *
      */
-
     public void loadFromFileGui(String fileLocation){
         System.out.println("Loading Tv Shows...");
         System.out.println("add from file remember to remove the quotes");
@@ -143,16 +151,12 @@ public class TvShowManager {
      *
      * Purpose:
      * creates a connection to the SQLite database using the provided file path
-     * and retrieves all records from the tv_shows table.
+     * and returns all records from the tv_shows table.
      *
-     * Arguments:
-     * String filepath - Path to the database file
+     * @param filepath the location that is submitted to the function from the gui form.
      *
-     * Return Value:
-     * ResultSet - Contains all records from the database
-
+     * @return Resultset this method returned the full data set of the database that was processed.
      */
-
     public ResultSet loadDatabase(String filepath){
         try{
             databaseConnection = DriverManager.getConnection(getSQLPREFIX()+getUrl());
@@ -174,10 +178,9 @@ public class TvShowManager {
      *
      * Purpose:
      * Collects input from the user to create a new TV show record,
-     * assigns a unique ID, and adds the new TvShow object
+     * assigns a unique ID, and adds the new TvShow object this function is used by the Main.java class.
      *
      * Arguments:
-     *
      *
      * Return Value:
      *
@@ -222,21 +225,19 @@ public class TvShowManager {
      * Method Name: addShowToDatabase
      *
      * Purpose:
-     * Inserts a new TV show record into the database using the provided parameters.
+     * Inserts a new TV show record into the database using the provided parameters. This method is used by the
+     * DatabaseGui.java class
      *
-     * Arguments:
-     * String title
-     * boolean is_anime
-     * int month
-     * int day
-     * int year
-     * int rating
-     * boolean is_finished
+     * @param title the title that the user entered on the form
+     * @param is_anime the true or false value representing if the show is animated.
+     * @param month the month associated with the tv show
+     * @param day the day associated with the tv show
+     * @param year the year associated with the tv show
+     * @param rating the rating of the tv show given by the user
+     * @param is_finished the boolean value that represents if the show is on the watchlist
      *
-     * Return Value:
-     * int for number of rows inserted or -1 if an error occurs
+     * @return int this method returns a -1 if the information was not added successfully to the program.
      */
-
     public int addShowToDatabase(String title,boolean is_anime,int month,int day,int year,int rating, boolean is_finished){
         try{
             Statement statement = databaseConnection.createStatement();
@@ -251,15 +252,14 @@ public class TvShowManager {
      * Method Name: getAllShows
      *
      * Purpose:
-     * Displays all TV show records currently stored in the system.
+     * Displays all TV show records currently stored in the system. This displays the tv show records using the console.
+     * This method is mainly used by the Main.java Class.
      *
      * Arguments:
-     *
      *
      * Return Value:
      *
      */
-
     public void getAllShows(){
         System.out.println("Getting all shows...");
         for(TvShow p : tvShows){
@@ -273,15 +273,13 @@ public class TvShowManager {
      *
      * Purpose:
      * Allows the user to modify specific attributes of an existing TV show
-     * record by selecting the record's ID and choosing which field to update.
+     * record by selecting the record's ID and choosing which field to update.This is used by the Main.java Class.
      *
      * Arguments:
-     *
      *
      * Return Value:
      *
      */
-
     public void updateShow(){
         Scanner input = new Scanner(System.in);
         System.out.println("Updating show...");
@@ -356,22 +354,21 @@ public class TvShowManager {
      * Method Name: updateDatabaseShowEntry
      *
      * Purpose:
-     * Updates an existing TV show record in the database using its ID.
+     * Updates an existing TV show record in the database using its ID and a sql statement. The information
+     * arguments are collected from the GUI form that has the information populated. This method is used with
+     * the DatabaseGui.java Class.
      *
-     * Arguments:
-     * int id
-     * String title
-     * boolean is_anime
-     * int month
-     * int day
-     * int year
-     * int rating
-     * boolean is_finished
+     * @param id the id that the user is looking to edit.
+     * @param title the updated title that the custoemer would like to change it to
+     * @param is_anime the updated animation status of the tv show
+     * @param month the updated month associated with the tv show
+     * @param day the updated day associated with the tv show
+     * @param year the updated year associated with the tv show.
+     * @param rating the updated rating associated with the tv show
+     * @param is_finished the updated status of the completion of the tv show
      *
-     * Return Value:
-     * int - Returns -1 if the update fails
+     * @return int the function returns an int of -1 if the update of the record fails.
      */
-
     public int updateDatabaseShowEntry(int id,String title,boolean is_anime,int month,int day,int year,int rating,boolean is_finished){
         try{
             Statement statement = databaseConnection.createStatement();
@@ -387,15 +384,13 @@ public class TvShowManager {
      *
      * Purpose:
      * Removes a TV show record from the collection based on the ID
-     * provided by the user.
+     * provided by the user.This is used by the Main.java Class
      *
      * Arguments:
-     *
      *
      * Return Value:
      *
      */
-
     public void deleteShow(){
         System.out.println("Deleting show...");
         System.out.println("Enter the id of the show that you need to delete.");
@@ -425,15 +420,13 @@ public class TvShowManager {
      *
      * Purpose:
      * Removes a TV show record from the collection based on the ID
-     * provided by the user used by the Gui format.
+     * provided by the user and collected from the DatabaseGui.java class
      *
-     * Arguments:
-     *int id
+     * @param id the id of the record that needs to be removed from the table and the arraylist of the program.
      *
      * Return Value:
      *
      */
-
     public void deleteShowGui(int id){
         System.out.println("Deleting show...");
         Iterator<TvShow> iterator = tvShows.iterator();
@@ -458,15 +451,13 @@ public class TvShowManager {
      * Method Name: deleteShowFromDatabase
      *
      * Purpose:
-     * Removes a TV show record from the database using its ID.
+     * Removes a TV show record from the database using its ID. This id is provided by the DatabaseGui.java. It is
+     * selected when the user makes a selection on the table.
      *
-     * Arguments:
-     * int index ID of the record to delete
+     * @param index the index of the option selected from the table.
      *
-     * Return Value:
-     * int number of rows deleted or -1 if an error occurs
+     * @return int number of rows deleted or -1 if an error occurs
      */
-
     public int deleteShowFromDatabase(int index){
         try{
             Statement statement = databaseConnection.createStatement();
@@ -482,15 +473,13 @@ public class TvShowManager {
      *
      * Purpose:
      * Calculates and returns the average rating of all TV shows
-     * currently stored in the system.
+     * currently stored in the system. This is the special function requirement. This is used by the
+     * Main.java and the MainWindow.java
      *
      * Arguments:
      *
-     *
-     * Return Value:
-     * double - The calculated average rating of all TV shows.
+     * @return double The calculated average rating of all TV shows in the arraylist.
      */
-
     public double calculateAverageRating(){
         System.out.println("Calculating average rating for all shows...");
         int numberOfTvShows = tvShows.size();
@@ -511,15 +500,14 @@ public class TvShowManager {
      * Method Name: calculateAvgRatingDatabase
      *
      * Purpose:
-     * Calculates the average rating of all TV shows stored in the database.
+     * Calculates the average rating of all TV shows stored in the database. THis is used by the DatabaseGui.java calss.
+     * To calculate the average it used the average statement inside sql.
      *
      * Arguments:
      * None
      *
-     * Return Value:
-     * double The average of the table ratings, or -1 if an error occurs
+     * @return double The average of the table ratings, or -1 if an error occurs
      */
-
     public double calculateAvgRatingDatabase(){
         try{
          Statement statement = databaseConnection.createStatement();
@@ -539,15 +527,13 @@ public class TvShowManager {
      *
      * Purpose:
      * Determines whether a given ID is already assigned to an existing
-     * TV show record in the collection.
+     * TV show record in the collection. This is used by the Main.java and the MainWindow.java classes to determine
+     * if an id is already used.
      *
-     * Arguments:
-     * int id - The ID value to check for.
+     * @param id The ID value to check for.
      *
-     * Return Value:
-     * boolean - Returns true if the ID is already in use, otherwise false.
+     * @return boolean - Returns true if the ID is already in use, otherwise false.
      */
-
     public boolean takenId(int id){
         for(TvShow p : tvShows){
             if(p.getId() == id){
@@ -562,15 +548,13 @@ public class TvShowManager {
      *
      * Purpose:
      * Generates and returns the next available unique ID that is not
-     * currently assigned to any existing TV show record.
+     * currently assigned to any existing TV show record. This is used by the Main.java Class and the MainWindow.java
+     * class
      *
      * Arguments:
      *
-     *
-     * Return Value:
-     * int - A unique ID value.
+     * @return int - A unique ID value.
      */
-
     public int setId() {
         for (int i = 1; i <= 9999999; i++) {
             boolean taken = false;
@@ -592,15 +576,14 @@ public class TvShowManager {
      *
      * Purpose:
      * Writes all current TV show records from the arrayList collection
-     * to the tvShows.txt file
+     * to the tvShows.txt file. This is used by the Main.java and the MainWindow.java class which relies on the
+     * information to ebe saved in a text file for the progress to be saved.
      *
      * Arguments:
-     *
      *
      * Return Value:
      *
      */
-
     public void saveToFile(){
         System.out.println("Saving Tv Shows...");
         try{
@@ -612,7 +595,6 @@ public class TvShowManager {
         }catch(IOException e){
             System.out.println("Error saving file try again");
         }
-
     }
 
     /**
@@ -620,15 +602,14 @@ public class TvShowManager {
      *
      * Purpose:
      * Checks whether the main data file exists in the program
-     * directory. If the file does not exist, it creates a new file.
+     * directory. If the file does not exist, it creates a new file. This is used by the Main.java and the
+     * MainWindow.java class.
      *
      * Arguments:
-     *
      *
      * Return Value:
      *
      */
-
     public boolean loadApp(){
         String fileName = "tvShows.txt"; //setting the file name
         try{
@@ -649,7 +630,6 @@ public class TvShowManager {
                 }
                 return true;
 
-
             }else{
                 System.out.println("The text file tvShows.txt does not exist... creating file ");
 
@@ -665,19 +645,44 @@ public class TvShowManager {
         return false;
     }
 
+    /**
+     * @return returns the array list
+     */
     public ArrayList<TvShow> getTvShows(){
         return tvShows;
     }
 
+    /**
+     * adds a tv show of type TvShow to the arraylist
+     *
+     * @param show type tvShow that is being added to the array.
+     */
     public void addShow(TvShow show){
         tvShows.add(show);
     }
 
+    /**
+     *
+     * @return Connection - returns type connection of the database that the user enters.
+     */
     public Connection getConnection(){
         return this.databaseConnection;
     }
 
+    /**
+     * @param url sets the URL that contains the location of the database
+     */
     public void setUrl(String url){this.url = url;}
+
+    /**
+     *
+     * @return returns the prefix that is needed to connect to the sqlite database
+     */
     public String getSQLPREFIX(){return SQLPREFIX;}
+
+    /**
+     *
+     * @return returns the location of the user entered sql database
+     */
     public String getUrl(){return url;}
 }

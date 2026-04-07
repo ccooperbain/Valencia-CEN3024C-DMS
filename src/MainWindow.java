@@ -1,3 +1,12 @@
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JSpinner;
+
 /**
  * Name: Christopher Bain
  * Course: 202620-CEN-3024C-23585
@@ -8,17 +17,6 @@
  *It handles what the Main.java used to handel
  *
  */
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JSpinner;
-
-
 public class MainWindow extends JFrame {
     TvShowManager tvShowManager = new TvShowManager();
     private JPanel mainPanel;
@@ -56,7 +54,7 @@ public class MainWindow extends JFrame {
 
 
     /**
-     * Constructor that contains the functionality of the buttons inside the program.
+     * This constructor defines the functionality of the buttons.
      */
     public MainWindow(){
         //addColumns();
@@ -188,12 +186,8 @@ public class MainWindow extends JFrame {
      * Serves as the entry point of the program. It initializes the TvShowManager,
      * and displays the gui of the application.
      *
-     *Arguments:
-     *
-     * Return Value:
-     *
+     * @param args
      */
-
     public static void main(String[] args){
 
         JFrame frame = new JFrame("TvShow Manager");
